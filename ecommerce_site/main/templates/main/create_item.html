@@ -1,0 +1,21 @@
+{% extends "main/base.html" %}
+
+{% block title %}Create Item{% endblock %}
+
+{% block content %}
+    <h1>This is the create item page</h1>
+
+    <form method="post" action="/create" class="form-group">
+        {% csrf_token %} <!--prevents hacking for authenticated users, required for all forms-->
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button type="submit" name="save" class="btn btn-success">Create New</button>
+            </div>
+            {{form}} <!--just keeping name field only-->
+        </div>
+
+         <!--normally you have tons of fields for each piece of data,
+        this form variable eliminates all of that -->
+
+    </form>
+{% endblock %}

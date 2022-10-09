@@ -1,0 +1,15 @@
+{% extends "main/base.html" %}
+
+{% block title %}Register{% endblock %}
+{% block content %}
+<h1>This is the register page</h1>
+<form method="post" action="#" class="form-group">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <button type="submit" name="save" class="btn btn-success">Register</button>
+        </div>
+        {{form}}
+    </div>
+</form>
+{% endblock %}
