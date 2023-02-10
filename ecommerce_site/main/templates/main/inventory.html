@@ -3,9 +3,16 @@
 {% block title %}Inventory{% endblock %}
 
 {% block content %}
-    {% for item in items %}
-         <p>Item: {{item.name}}</p>
-         <p>Description: {{item.description}}</p>
-         <p>Price: {{item.price}}</p>
-    {% endfor %}
+    <form method="post" action="/cart">
+        {% csrf_token %}
+        {% for item in items %}
+             <p>Item: {{item.name}}</p>
+             <p>Description: {{item.description}}</p>
+             <p>Price: {{item.price}}</p>
+             <p>Seller: {{item.seller}}</p>
+             <input type="checkbox" id="{{item.name}}" name="{{item.name}}" value="{{item.name}}">
+            <label for="{{item.name}}">Buy</label><br>
+        {% endfor %}
+        <button type="submit" name="submit" value="cart" class="btn btn-success">Add To Cart</button>
+    </form>
 {% endblock %}

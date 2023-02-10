@@ -27,3 +27,11 @@ def list_all_items(request):
 def show_item(request, id):
     item = Item.objects.get(id=id)
     return render(request, "main/item.html", {"item": item})
+
+def cart(request):
+    if request.method == 'POST':
+        arguments = request.POST
+        cart_items = [Item.objects.get(name=a) for a in arguments if 'item' in a]
+        for c in cart_items:
+            print(f'Cart Item: {c}, type c {type(c)}')
+    return render(request, "main/cart.html", {"cart_items":cart_items})

@@ -3,7 +3,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 
 class Item(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     description = models.CharField(max_length=300)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     post_date = models.DateField(default=datetime.today().date())
