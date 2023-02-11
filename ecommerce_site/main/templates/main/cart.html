@@ -3,32 +3,31 @@
 {% block title %}Cart{% endblock %}
 {% block sitename %}<h1 class="mt-2">My Cart</h1>{% endblock %}
 
-<style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-</style>
 {% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'main/cart.css' %}">
+<p>Item info: {{ item_info }}</p>
+{% for item, quantity in item_info %}
+    {{ item.name }} {{ quantity }}
+{% endfor %}
 <table>
   <tr>
     <th>Item</th>
     <th>Price</th>
     <th>Quantity</th>
   </tr>
-    {% for item in cart_items %}
+
+    {% for item, quantity in item_info %}
         <tr>
             <td>{{ item.name }}</td>
             <td>{{ item.price }}</td>
-            <td>1</td>
+            <td>{{ quantity }}</td>
         </tr>
     {% endfor %}
+    <tr>
+        <td>Total</td>
+        <td>{{ total_cost }}</td>
+        <td>{{ total_quantity }}</td>
+    </tr>
 </table>
 {% endblock %}
