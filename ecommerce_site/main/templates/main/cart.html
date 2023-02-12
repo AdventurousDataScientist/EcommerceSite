@@ -6,10 +6,7 @@
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'main/cart.css' %}">
-<p>Item info: {{ item_info }}</p>
-{% for item, quantity in item_info %}
-    {{ item.name }} {{ quantity }}
-{% endfor %}
+
 <table>
   <tr>
     <th>Item</th>
@@ -17,13 +14,15 @@
     <th>Quantity</th>
   </tr>
 
-    {% for item, quantity in item_info %}
+    {% for item_name, info in item_info.items %}
         <tr>
-            <td>{{ item.name }}</td>
-            <td>{{ item.price }}</td>
-            <td>{{ quantity }}</td>
+            <td>{{ item_name }}</td>
+            {% for val in info %}
+                <td>{{ val }}</td>
+            {% endfor %}
         </tr>
     {% endfor %}
+
     <tr>
         <td>Total</td>
         <td>{{ total_cost }}</td>
