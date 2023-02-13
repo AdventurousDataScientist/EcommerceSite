@@ -10,6 +10,6 @@ urlpatterns = [
     path("inventory", views.list_all_items, name="inventory"),
     path("cart", views.cart, name="cart"),
     path("account", views.account, name="account"),
-    path("history", views.history, name="history")
-
+    path("history", views.history, name="history"),
+    path("checkout", views.checkout, name="checkout")
 ]

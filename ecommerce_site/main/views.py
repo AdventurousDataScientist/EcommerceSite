@@ -33,7 +33,12 @@ def show_item(request, id):
 
 def cart(request):
     if request.method == 'POST':
+        #print('Cart Post request')
         arguments = request.POST
+        print('Cart Post request')
+        print(f'Arguments: {arguments}')
+        cart_debug_file.write('Cart Post request')
+        cart_debug_file.write(f'Arguments: {arguments}')
         cart_items = [Item.objects.get(name=a) for a in arguments if 'item' in a and '_quantity' not in a]
         cart_item_quantities = [int(arguments[a]) for a in arguments if '_quantity' in a]
         item_info = dict()
@@ -42,7 +47,7 @@ def cart(request):
         total_cost = 0
         total_quantity = 0
         for item, info in item_info.items():
-            cart_debug_file.write(f'Item: {item}, Quantity: {info[1]}')
+            #cart_debug_file.write(f'Item: {item}, Quantity: {info[1]}')
 
             total_cost += info[0] * info[1]
             total_quantity += info[1]
@@ -60,3 +65,6 @@ def account(request):
 
 def history(request):
     return render(request, "main/history.html")
+
+def checkout(request):
+    return render(request, "main/checkout.html")
