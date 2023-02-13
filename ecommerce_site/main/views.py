@@ -51,4 +51,12 @@ def cart(request):
                'total_cost':total_cost
                        }
     #cart_debug_file.close()
+    elif request.method == 'GET':
+        context = {}
     return render(request, "main/cart.html", context)
+
+def account(request):
+    return render(request, "main/account.html")
+
+def history(request):
+    return render(request, "main/history.html")
