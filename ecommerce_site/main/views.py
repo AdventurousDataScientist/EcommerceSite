@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .forms import CreateItem
-from .models import Item
+from .forms import CreateItem, PaymentForm
+from .models import Item, PaymentModel
 
 cart_debug_file = open("cart_debug.txt", "w")
 
@@ -61,7 +61,38 @@ def cart(request):
     return render(request, "main/cart.html", context)
 
 def account(request):
-    return render(request, "main/account.html")
+    if request.method == 'POST':
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            """
+            demo data
+            cc# = 4444333322221111
+            expiration date 02/23
+            cvv 000
+            """
+            credit_card_number = form.cleaned_data["cc_number"]
+            expiration_date = form.cleaned_data["cc_expiry"]
+            cvv = form.cleaned_data["cc_code"]
+
+            username = 'N/A'
+            email = 'N/A'
+            print(f'user authenticated? {request.user.is_authenticated}')
+            if request.user.is_authenticated:
+                username = request.user.username
+                email = request.user.email
+                payment = PaymentModel(name=username,\
+                            credit_card_number=credit_card_number,\
+                            expiration_date=expiration_date,\
+                            cvv=cvv)
+                payment.save()
+                print(f'Saved payment instance: {payment}')
+                print('')
+                print(PaymentModel.objects.all())
+    else:
+        form = PaymentForm()
+
+    context = {"form": form}
+    return render(request, "main/account.html", context=context)
 
 def history(request):
     return render(request, "main/history.html")
