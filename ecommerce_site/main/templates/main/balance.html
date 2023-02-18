@@ -1,14 +1,15 @@
 {% extends "main/base.html" %}
 
-{% block title %}My Account{% endblock %}
-{% block sitename %}My Account{% endblock %}
+{% block title %}My Balance{% endblock %}
+{% block sitename %}My Balance{% endblock %}
 
 {% block content %}
-<form method="post" action="/account" class="form-group">
+<p>Balance: {{balance}}</p>
+<form method="post" action="#" class="form-group">
         {% csrf_token %} <!--prevents hacking for authenticated users, required for all forms-->
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <button type="submit" name="save" class="btn btn-success">Submit</button>
+                <button type="submit" name="save" class="btn btn-success">Deposit</button>
             </div>
             {{form}}
         </div>
