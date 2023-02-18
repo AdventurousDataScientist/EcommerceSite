@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from .forms import CreateItem, PaymentForm
-from .models import Item, PaymentModel
+from .forms import CreateItem, PaymentForm, DepositForm
+from .models import Item, PaymentModel, Profile
 
-cart_debug_file = open("cart_debug.txt", "w")
+debug_file = open("debug.txt", "w")
 
 # Create your views here.
 def home(request):
@@ -37,8 +37,8 @@ def cart(request):
         arguments = request.POST
         print('Cart Post request')
         print(f'Arguments: {arguments}')
-        cart_debug_file.write('Cart Post request')
-        cart_debug_file.write(f'Arguments: {arguments}')
+        #cart_debug_file.write('Cart Post request')
+        #cart_debug_file.write(f'Arguments: {arguments}')
         cart_items = [Item.objects.get(name=a) for a in arguments if 'item' in a and '_quantity' not in a]
         cart_item_quantities = [int(arguments[a]) for a in arguments if '_quantity' in a]
         item_info = dict()
@@ -73,22 +73,27 @@ def account(request):
             credit_card_number = form.cleaned_data["cc_number"]
             expiration_date = form.cleaned_data["cc_expiry"]
             cvv = form.cleaned_data["cc_code"]
-
             username = 'N/A'
             email = 'N/A'
             print(f'user authenticated? {request.user.is_authenticated}')
             if request.user.is_authenticated:
                 username = request.user.username
                 email = request.user.email
-                payment = PaymentModel(name=username,\
+                if not hasattr(request.user, 'paymentmodel'):
+                    payment = PaymentModel(user=request.user,\
                             credit_card_number=credit_card_number,\
                             expiration_date=expiration_date,\
                             cvv=cvv)
-                payment.save()
-                print(f'Saved payment instance: {payment}')
-                print('')
-                print(PaymentModel.objects.all())
+                    payment.save() # created credit card information
+                    print('Credit Card Info uploaded')
+                    print(f'Now add balance')
+                    return redirect(f"/balance")
+                """# need to add balance amount to website
+                if not hasattr(request.user, 'profile'):
+                    p = Profile(user=request.user, balance=balance)"""
     else:
+        # if there is an account display that information, account username, balance
+        # otherwise show the create account form
         form = PaymentForm()
 
     context = {"form": form}
@@ -99,3 +104,37 @@ def history(request):
 
 def checkout(request):
     return render(request, "main/checkout.html")
+
+def balance(request):
+    if request.method == 'POST':
+        debug_file = open("debug.txt", "w")
+        debug_file.write(f'BALANCE PAGE: POST REQUEST WORKS')
+        form = DepositForm(request.POST)
+        if form.is_valid():
+            # adding money to new account
+            balance = form.cleaned_data["balance"]
+            if not hasattr(request.user, 'profile'):
+                p = Profile(user=request.user, balance=balance)
+                p.save()
+            # adding money to existing account
+            else:
+                request.user.profile.balance += balance
+                request.user.profile.save()
+            context = {"form": form, "balance": request.user.profile.balance}
+            debug_file.write(f'BALANCE PAGE: USER PROFILE ADDED')
+            debug_file.write(f'BALANCE PAGE: ADDING BALANCE BALANCE {request.user.profile.balance}, {type(balance)}')
+            debug_file.close()
+            return render(request, "main/balance.html", context)
+        #return render(request, "main/balance.html")
+    elif request.method == 'GET':
+        print(f'BALANCE PAGE: GET REQUEST WORKS')
+        debug_file = open("debug.txt", "w")
+        debug_file.write(f'BALANCE PAGE: GET REQUEST WORKS')
+        form = DepositForm()
+        balance = 0
+        if hasattr(request.user, 'profile'):
+            balance = request.user.profile.balance
+        context = {"form": form, "balance": balance}
+        debug_file.write(f'BALANCE PAGE: BALANCE {balance}, {type(balance)}')
+        debug_file.close()
+        return render(request, "main/balance.html", context=context)

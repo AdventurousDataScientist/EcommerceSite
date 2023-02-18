@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, BaseUserManager, AbstractUser
+from creditcards.models import CardNumberField, CardExpiryField, SecurityCodeField
 
 class Item(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -11,4 +12,18 @@ class Item(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sold_items", null=True)
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bought_items", null=True)
 
-# Create your models here.
+class PaymentModel(models.Model):
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    credit_card_number = models.CharField(max_length=16)
+    expiration_date = models.CharField(max_length=5)
+    cvv = models.CharField(max_length=3)
+
+    def __str__(self):
+        return f'username: {self.user.get_username()}, Credit_Card_Number: {self.credit_card_number}'
+
+class Profile(models.Model): # user is the parent
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    balance = models.DecimalField(default=0.00, max_digits=20, decimal_places=2)
+
+    def __str__(self):
+        return f'username: {self.user.get_username()}, Balance: {self.balance}'

@@ -11,6 +11,9 @@ class CreateItem(forms.Form):
     description = forms.CharField(label="description", min_length=2, max_length=300, required=True)
     price = forms.DecimalField(label="enter price")
 
+class DepositForm(forms.Form):
+    balance = forms.DecimalField(max_digits=10, min_value=0.01)
+
 
 
 
