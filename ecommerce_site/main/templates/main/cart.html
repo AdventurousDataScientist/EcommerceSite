@@ -13,7 +13,6 @@
     <th>Price</th>
     <th>Quantity</th>
   </tr>
-
     {% for item_name, info in item_info.items %}
         <tr>
             <td>{{ item_name }}</td>
@@ -22,7 +21,6 @@
             {% endfor %}
         </tr>
     {% endfor %}
-
     <tr>
         <td>Total</td>
         <td>{{ total_cost }}</td>

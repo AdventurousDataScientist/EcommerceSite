@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
 from .forms import CreateItem, PaymentForm, DepositForm
-from .models import Item, PaymentModel, Profile
+from .models import Item, PaymentModel, Profile, Order
 
 debug_file = open("debug.txt", "w")
 
 # Create your views here.
+
+
 def home(request):
     return render(request, "main/home.html")
+
 
 def create(request):
     if request.method == 'POST':
@@ -23,32 +26,49 @@ def create(request):
         form = CreateItem()
         return render(request, "main/create_item.html", {"form": form})
 
+
 def list_all_items(request):
     items = Item.objects.all()
     return render(request, "main/inventory.html", {"items":items})
+
 
 def show_item(request, id):
     item = Item.objects.get(id=id)
     return render(request, "main/item.html", {"item": item})
 
+
 def cart(request):
+    context = {}
     if request.method == 'POST':
-        #print('Cart Post request')
-        arguments = request.POST
         print('Cart Post request')
-        print(f'Arguments: {arguments}')
+        arguments = request.POST
+        debug_file = open("debug.txt", "w")
+        debug_file.write('CART PAGE: Cart Post request \n')
+        debug_file.write('\n')
+        debug_file.write(f'CART PAGE Arguments \n')
+        for key, value in arguments.items():
+            debug_file.write(f'Argument: {key}, value: {value} \n')
+        checkboxes = request.POST.getlist('checks[]')
+        debug_file.write('\n')
+        debug_file.write('\n')
+        debug_file.write(f'CART PAGE Checkboxes: {checkboxes} \n')
+        for c in checkboxes:
+            debug_file.write(f'Checkbox: {c} \n')
         #cart_debug_file.write('Cart Post request')
-        #cart_debug_file.write(f'Arguments: {arguments}')
-        cart_items = [Item.objects.get(name=a) for a in arguments if 'item' in a and '_quantity' not in a]
+        #cart_debug_file.write(f'Arguments: {arguments}
+        # i do not have item in the item name (BIG PROBLEM)
+
+        cart_items = [Item.objects.get(name=a.split('item_')[1]) for a in arguments if 'item' in a and '_quantity' not in a]
         cart_item_quantities = [int(arguments[a]) for a in arguments if '_quantity' in a]
         item_info = dict()
+        #order = Order(username=request.user.username)
         for item, quantity in zip(cart_items, cart_item_quantities):
             item_info[item.name] = [item.price, quantity]
+            #i = Item(name=item.name, price=item.price, description=item.description, buyer=request.user.username, order=order)
+
         total_cost = 0
         total_quantity = 0
         for item, info in item_info.items():
-            #cart_debug_file.write(f'Item: {item}, Quantity: {info[1]}')
-
             total_cost += info[0] * info[1]
             total_quantity += info[1]
             context = {"item_info":item_info,
@@ -58,6 +78,10 @@ def cart(request):
     #cart_debug_file.close()
     elif request.method == 'GET':
         context = {}
+
+    debug_file.write(f'CART PAGE Context: {context}')
+    debug_file.close()
+
     return render(request, "main/cart.html", context)
 
 def account(request):
@@ -67,8 +91,8 @@ def account(request):
             """
             demo data
             cc# = 4444333322221111
-            expiration date 02/23
-            cvv 000
+            expiration date 11111
+            cvv 111
             """
             credit_card_number = form.cleaned_data["cc_number"]
             expiration_date = form.cleaned_data["cc_expiry"]
