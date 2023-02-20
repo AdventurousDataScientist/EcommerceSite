@@ -58,15 +58,15 @@ def cart(request):
         #cart_debug_file.write(f'Arguments: {arguments}
         # i do not have item in the item name (BIG PROBLEM)
 
-        cart_items = [Item.objects.get(name=a.split('item_')[1]) for a in arguments if 'item' in a and '_quantity' not in a]
-        cart_item_quantities = [int(arguments[a]) for a in arguments if '_quantity' in a]
-        item_info = dict()
+        #cart_items = [Item.objects.get(name=a.split('item_')[1]) for a in arguments if 'item' in a and '_quantity' not in a]
+        #cart_item_quantities = [int(arguments[a]) for a in arguments if '_quantity' in a]
+        #item_info = dict()
         #order = Order(username=request.user.username)
-        for item, quantity in zip(cart_items, cart_item_quantities):
-            item_info[item.name] = [item.price, quantity]
+        #for item, quantity in zip(cart_items, cart_item_quantities):
+        #    item_info[item.name] = [item.price, quantity]
             #i = Item(name=item.name, price=item.price, description=item.description, buyer=request.user.username, order=order)
 
-        total_cost = 0
+        """total_cost = 0
         total_quantity = 0
         for item, info in item_info.items():
             total_cost += info[0] * info[1]
@@ -74,7 +74,7 @@ def cart(request):
             context = {"item_info":item_info,
                 'total_quantity': total_quantity,
                'total_cost':total_cost
-                       }
+                       }"""
     #cart_debug_file.close()
     elif request.method == 'GET':
         context = {}
