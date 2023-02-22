@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import CreateItem, PaymentForm, DepositForm
-from .models import Item, PaymentModel, Profile, Order
+from .models import Item, PaymentModel, Profile, Order, PurchasedItem
+import datetime
 
 debug_file = open("debug.txt", "w")
 
@@ -48,25 +49,29 @@ def cart(request):
         debug_file.write(f'CART PAGE Arguments \n')
         for key, value in arguments.items():
             debug_file.write(f'Argument: {key}, value: {value} \n')
-        checkboxes = request.POST.getlist('checks[]')
+        #checkboxes = request.POST.getlist('checks[]')
         debug_file.write('\n')
         debug_file.write('\n')
-        debug_file.write(f'CART PAGE Checkboxes: {checkboxes} \n')
-        for c in checkboxes:
-            debug_file.write(f'Checkbox: {c} \n')
+        #debug_file.close()
+        #debug_file.write(f'CART PAGE Checkboxes: {checkboxes} \n')
+        #for c in checkboxes:
+        #    debug_file.write(f'Checkbox: {c} \n')
         #cart_debug_file.write('Cart Post request')
         #cart_debug_file.write(f'Arguments: {arguments}
         # i do not have item in the item name (BIG PROBLEM)
 
-        #cart_items = [Item.objects.get(name=a.split('item_')[1]) for a in arguments if 'item' in a and '_quantity' not in a]
-        #cart_item_quantities = [int(arguments[a]) for a in arguments if '_quantity' in a]
-        #item_info = dict()
-        #order = Order(username=request.user.username)
-        #for item, quantity in zip(cart_items, cart_item_quantities):
-        #    item_info[item.name] = [item.price, quantity]
+        cart_items = [Item.objects.get(name=arguments[a]) for a in arguments if 'item_' in a and '_quantity' not in a]
+        cart_item_quantities = [int(arguments[a]) for a in arguments if '_quantity' in a]
+        item_info = dict()
+        order = Order(username=request.user.username)
+        order.save()
+        for item, quantity in zip(cart_items, cart_item_quantities):
+            item_info[item.name] = [item.price, quantity]
+            purchased_item = PurchasedItem(name=item.name, description=item.description, price=item.price, quantity=quantity, purchase_date=datetime.datetime.now(), order=order)
+            purchased_item.save()
             #i = Item(name=item.name, price=item.price, description=item.description, buyer=request.user.username, order=order)
 
-        """total_cost = 0
+        total_cost = 0
         total_quantity = 0
         for item, info in item_info.items():
             total_cost += info[0] * info[1]
@@ -74,7 +79,7 @@ def cart(request):
             context = {"item_info":item_info,
                 'total_quantity': total_quantity,
                'total_cost':total_cost
-                       }"""
+                       }
     #cart_debug_file.close()
     elif request.method == 'GET':
         context = {}
@@ -127,7 +132,31 @@ def history(request):
     return render(request, "main/history.html")
 
 def checkout(request):
-    return render(request, "main/checkout.html")
+    # form should have purchase button
+    context = {}
+    if request.method == 'GET':
+        debug_file = open("debug.txt", "w")
+        debug_file.write('CHECK OUT GET REQUEST WORKS \n')
+        order = Order.objects.get(username=request.user.username)
+        total_cost = 0
+        total_quantity = 0
+        debug_file.write(f"{request.user.username}'s order: \n")
+        for p_i in order.purchaseditem_set.all():
+            debug_file.write(f"{p_i} \n")
+            total_cost += p_i.quantity * p_i.price
+            total_quantity += p_i.quantity
+        debug_file.write(f'Total Cost: {total_cost}, Balance: {request.user.profile.balance} \n')
+        request.user.profile.balance -= total_cost
+        request.user.profile.save()
+        debug_file.write(f'Balance After Purchase: {request.user.profile.balance} \n')
+        debug_file.close()
+        context = {
+                    "profile":request.user.profile,
+                    "order": order,
+                   "total_cost": total_cost,
+                "total_quantity": total_quantity
+                   }
+    return render(request, "main/checkout.html", context)
 
 def balance(request):
     if request.method == 'POST':
@@ -162,3 +191,6 @@ def balance(request):
         debug_file.write(f'BALANCE PAGE: BALANCE {balance}, {type(balance)}')
         debug_file.close()
         return render(request, "main/balance.html", context=context)
+
+def end(request):
+    return render(request, "main/end.html")

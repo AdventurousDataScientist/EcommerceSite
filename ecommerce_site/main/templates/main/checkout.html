@@ -2,3 +2,33 @@
 
 {% block title %}Checkout{% endblock %}
 {% block sitename %}Checkout{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'main/cart.css' %}">
+
+<table>
+  <tr>
+    <th>Item</th>
+    <th>Price</th>
+    <th>Quantity</th>
+  </tr>
+    {% for purchased_item in order.purchaseditem_set.all %}
+        <tr>
+            <td>{{ purchased_item.name }}</td>
+            <td>{{ purchased_item.quantity }}</td>
+            <td>{{ purchased_item.price }}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td>Total</td>
+        <td>{{ total_cost }}</td>
+        <td>{{ total_quantity }}</td>
+    </tr>
+</table>
+<p>Balance: {{profile.balance}}</p>
+<br>
+<a class="btn btn-primary" name="back" href="/cart">Back</a>
+<a class="btn btn-primary" name="finish" href="/end">Finish</a>
+{% endblock %}

@@ -12,5 +12,7 @@ urlpatterns = [
     path("account", views.account, name="account"),
     path("history", views.history, name="history"),
     path("checkout", views.checkout, name="checkout"),
-    path("balance", views.balance, name="balance")
+    path("balance", views.balance, name="balance"),
+    path("end", views.end, name="end")
+
 ]
