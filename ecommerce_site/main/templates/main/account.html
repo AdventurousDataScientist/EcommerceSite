@@ -4,17 +4,17 @@
 {% block sitename %}My Account{% endblock %}
 
 {% block content %}
-<form method="post" action="/account" class="form-group">
-        {% csrf_token %} <!--prevents hacking for authenticated users, required for all forms-->
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <button type="submit" name="save" class="btn btn-success">Submit</button>
+{% if not has_profile %}
+    <form method="post" action="/account" class="form-group">
+            {% csrf_token %} <!--prevents hacking for authenticated users, required for all forms-->
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <button type="submit" name="save" class="btn btn-success">Submit</button>
+                </div>
+                {{form}}
             </div>
-            {{form}}
-        </div>
-
-         <!--normally you have tons of fields for each piece of data,
-        this form variable eliminates all of that -->
-
-    </form>
+        </form>
+{% else %}
+    <p>You are an existing user, you will not be able to create an account!</p>
+{% endif %}
 {% endblock %}

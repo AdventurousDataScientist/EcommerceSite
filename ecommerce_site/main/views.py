@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import CreateItem, PaymentForm, DepositForm
-from .models import Item, PaymentModel, Profile, Order, PurchasedItem
+from .models import Item, Profile, Order, PurchasedItem
 import datetime
 
 debug_file = open("debug.txt", "w")
@@ -90,8 +90,10 @@ def cart(request):
     return render(request, "main/cart.html", context)
 
 def account(request):
+    context = {}
     if request.method == 'POST':
         form = PaymentForm(request.POST)
+        has_profile = False
         if form.is_valid():
             """
             demo data
@@ -108,12 +110,13 @@ def account(request):
             if request.user.is_authenticated:
                 username = request.user.username
                 email = request.user.email
-                if not hasattr(request.user, 'paymentmodel'):
-                    payment = PaymentModel(user=request.user,\
+                if not hasattr(request.user, 'profile'):
+
+                    profile = Profile(user=request.user,\
                             credit_card_number=credit_card_number,\
                             expiration_date=expiration_date,\
                             cvv=cvv)
-                    payment.save() # created credit card information
+                    profile.save() # created credit card information
                     print('Credit Card Info uploaded')
                     print(f'Now add balance')
                     return redirect(f"/balance")
@@ -123,9 +126,18 @@ def account(request):
     else:
         # if there is an account display that information, account username, balance
         # otherwise show the create account form
-        form = PaymentForm()
+        has_profile = False
+        if hasattr(request.user, 'profile'):
+            has_profile = True
+            context = {"has_profile": has_profile}
+        else:
+            has_profile = False
+            form = PaymentForm()
+            context = {
+                "form": form,
+                "has_profile": has_profile
+            }
 
-    context = {"form": form}
     return render(request, "main/account.html", context=context)
 
 def history(request):
@@ -159,6 +171,8 @@ def checkout(request):
     return render(request, "main/checkout.html", context)
 
 def balance(request):
+    # MUST HAVE PROFILE BEFORE THIS FUNCTION IS EXECUTED
+    # should throw an error, do error handling later
     if request.method == 'POST':
         debug_file = open("debug.txt", "w")
         debug_file.write(f'BALANCE PAGE: POST REQUEST WORKS')
@@ -167,6 +181,7 @@ def balance(request):
             # adding money to new account
             balance = form.cleaned_data["balance"]
             if not hasattr(request.user, 'profile'):
+                # should throw an error, do error handling later
                 p = Profile(user=request.user, balance=balance)
                 p.save()
             # adding money to existing account

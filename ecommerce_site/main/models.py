@@ -7,6 +7,8 @@ from creditcards.models import CardNumberField, CardExpiryField, SecurityCodeFie
 class Order(models.Model):
     username = models.CharField(max_length=50, unique=True)
 
+    def __str__(self):
+        return f'Order for {self.username}'
 
 class Item(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -29,21 +31,18 @@ class PurchasedItem(models.Model):
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bought_items", null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
 
-
-class PaymentModel(models.Model):
-    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    credit_card_number = models.CharField(max_length=16)
-    expiration_date = models.CharField(max_length=5)
-    cvv = models.CharField(max_length=3)
-
     def __str__(self):
-        return f'username: {self.user.get_username()}, Credit_Card_Number: {self.credit_card_number}'
+        return f'order: {self.order}, Item: {self.name}, price: {self.price}, quantity: {self.quantity}'
+
 
 class Profile(models.Model): # user is the parent
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     balance = models.DecimalField(default=0.00, max_digits=20, decimal_places=2)
+    credit_card_number = models.CharField(max_length=16, default='1111111111111111')
+    expiration_date = models.CharField(max_length=5, default='11111'),
+    cvv = models.CharField(max_length=3, default='111')
 
     def __str__(self):
-        return f'username: {self.user.get_username()}, Balance: {self.balance}'
+        return f'username: {self.user.get_username()}, Balance: {self.balance}, Credit Card Number: {self.credit_card_number}'
 
 
