@@ -32,7 +32,7 @@ class PurchasedItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f'order: {self.order}, Item: {self.name}, price: {self.price}, quantity: {self.quantity}'
+        return f'order: {self.order}, Item: {self.name}, price: {self.price}, quantity: {self.quantity}, order date: {self.purchase_date}'
 
 
 class Profile(models.Model): # user is the parent

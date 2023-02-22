@@ -141,7 +141,9 @@ def account(request):
     return render(request, "main/account.html", context=context)
 
 def history(request):
-    return render(request, "main/history.html")
+    orders = Order.objects.all().filter(username=request.user.username)
+    context = {"orders":orders}
+    return render(request, "main/history.html", context=context)
 
 def checkout(request):
     # form should have purchase button

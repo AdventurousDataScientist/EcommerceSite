@@ -2,3 +2,14 @@
 
 {% block title %}Order History{% endblock %}
 {% block sitename %}Order History{% endblock %}
+
+{% block content %}
+    {% for o in orders %}
+        {% for p_i in o.purchaseditem_set.all %}
+            <p>{{p_i}}</p>
+            <br>
+        {% endfor %}
+        <br>
+        <br>
+    {% endfor %}
+{% endblock %}
