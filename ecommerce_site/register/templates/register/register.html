@@ -1,16 +1,40 @@
-{% extends "main/base.html" %}
+{% extends 'main/base.html' %}
 
 {% block title %}Register{% endblock %}
+
+<h1>{% block sitename %}Register{% endblock %}</h1>
+
 {% block content %}
-<h1>This is the register page</h1>
-{% block sitename %}Register{% endblock %}
-<form method="post" action="#" class="form-group">
-    {% csrf_token %}
-    <div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <button type="submit" name="save" class="btn btn-success">Register</button>
+
+<div class="header-bar">
+    <h1>Register</h1>
+</div>
+
+<div class="card-body">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-attrs">
+            <label>{{form.username.label}}</label>
+            {{form.username}}
         </div>
-        {{form}}
-    </div>
-</form>
-{% endblock %}
+
+        <div class="form-attrs">
+            <label>{{form.email.label}}</label>
+            <br>
+            {{form.email}}
+        </div>
+
+        <div class="form-attrs">
+            <label>{{form.password1.label}}</label>
+            {{form.password1}}
+        </div>
+
+        <div class="form-attrs">
+            <label>{{form.password2.label}}</label>
+            {{form.password2}}
+        </div>
+        <br>
+        <button type="submit" class="button">Register</button>
+    </form>
+</div>
+{% endblock content %}

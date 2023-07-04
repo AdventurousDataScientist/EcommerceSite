@@ -3,5 +3,9 @@
 {% block sitename %}Home{% endblock %}
 
 {% block content %}
-<h1>This is the home page, welcome {{ user.get_username }}</h1>
+<h1>This is your home page, welcome {{ username }}</h1>
+
+<p>Create store <a href="/create_store">here</a></p>
+
+<p>Your Stores</p>
 {% endblock %}

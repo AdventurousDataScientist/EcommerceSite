@@ -14,6 +14,11 @@ class CreateItem(forms.Form):
 class DepositForm(forms.Form):
     balance = forms.DecimalField(max_digits=10, min_value=0.01)
 
+class CreateStoreForm(forms.Form):
+    category = forms.CharField(label="category", min_length=2, max_length=100, required=True)
+    description = forms.CharField(label="description", min_length=2, max_length=300, required=True)
+    name = forms.CharField(label="name", min_length=2, max_length=300, required=True)
 
+    
 
 

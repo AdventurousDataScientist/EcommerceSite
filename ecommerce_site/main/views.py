@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
-from .forms import CreateItem, PaymentForm, DepositForm
-from .models import Item, Profile, Order, PurchasedItem
 import datetime
+
+from django.shortcuts import render, redirect
+
+from .forms import CreateItem, PaymentForm, DepositForm, CreateStoreForm
+from .models import Item, Profile, Order, PurchasedItem, Store
 
 debug_file = open("debug.txt", "w")
 
@@ -9,7 +11,8 @@ debug_file = open("debug.txt", "w")
 
 
 def home(request):
-    return render(request, "main/home.html")
+    print(f'Home page username: {request.user.username}, type: {type(request.user.username)}')
+    return render(request, "main/home.html", {"username":request.user.username})
 
 
 def create(request):
@@ -63,7 +66,7 @@ def cart(request):
         cart_items = [Item.objects.get(name=arguments[a]) for a in arguments if 'item_' in a and '_quantity' not in a]
         cart_item_quantities = [int(arguments[a]) for a in arguments if '_quantity' in a]
         item_info = dict()
-        order = Order(username=request.user.username)
+        order = Order(user=request.user)
         order.save()
         for item, quantity in zip(cart_items, cart_item_quantities):
             item_info[item.name] = [item.price, quantity]
@@ -141,7 +144,7 @@ def account(request):
     return render(request, "main/account.html", context=context)
 
 def history(request):
-    orders = Order.objects.all().filter(username=request.user.username)
+    orders = Order.objects.all().filter(user=request.user)
     context = {"orders":orders}
     return render(request, "main/history.html", context=context)
 
@@ -151,7 +154,7 @@ def checkout(request):
     if request.method == 'GET':
         debug_file = open("debug.txt", "w")
         debug_file.write('CHECK OUT GET REQUEST WORKS \n')
-        order = Order.objects.get(username=request.user.username)
+        order = Order.objects.get(user=request.user)
         total_cost = 0
         total_quantity = 0
         debug_file.write(f"{request.user.username}'s order: \n")
@@ -211,3 +214,19 @@ def balance(request):
 
 def end(request):
     return render(request, "main/end.html")
+
+def create_store(request):
+    if request.method == 'GET':
+        form = CreateStoreForm()
+        context = {"form": form}
+    elif request.method == 'POST':
+        form = CreateStoreForm(request.POST)
+        if form.is_valid():
+            category = form.cleaned_data["category"]
+            description = form.cleaned_data["description"]
+            name = form.cleaned_data["name"]
+            revenue = 0.00
+            store = Store(owner=request.user, name=name, category=category, description=description, revenue=0.00)
+            store.save()
+            context = {"form": CreateStoreForm()}
+    return render(request, "main/create_store.html", context=context)

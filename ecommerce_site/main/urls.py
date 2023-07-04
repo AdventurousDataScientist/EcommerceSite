@@ -13,6 +13,6 @@ urlpatterns = [
     path("history", views.history, name="history"),
     path("checkout", views.checkout, name="checkout"),
     path("balance", views.balance, name="balance"),
-    path("end", views.end, name="end")
-
+    path("end", views.end, name="end"),
+    path("create_store", views.create_store, name="create_store")
 ]
