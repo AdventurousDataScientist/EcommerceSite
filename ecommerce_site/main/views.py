@@ -11,8 +11,9 @@ debug_file = open("debug.txt", "w")
 
 
 def home(request):
-    print(f'Home page username: {request.user.username}, type: {type(request.user.username)}')
-    return render(request, "main/home.html", {"username":request.user.username})
+    #print(f'Home page username: {request.user.username}, type: {type(request.user.username)}')
+    stores = request.user.store_set.all()
+    return render(request, "main/home.html", {"user":request.user, "stores":stores})
 
 
 def create(request):

@@ -3,9 +3,17 @@
 {% block sitename %}Home{% endblock %}
 
 {% block content %}
-<h1>This is your home page, welcome {{ username }}</h1>
+<h1>This is your home page, welcome {{ user.get_username }}</h1>
 
 <p>Create store <a href="/create_store">here</a></p>
 
-<p>Your Stores</p>
+<h2>Your Stores</h2>
+
+{% for store in stores %}
+    <!--Put it around a div-->
+    <p>Store: {{ store.name }}</p>
+    <p>Category: {{ store.category }}</p>
+    <p>Description: {{ store.description }}</p>
+    <p>Revenue: {{ store.revenue }}</p>
+{% endfor %}
 {% endblock %}

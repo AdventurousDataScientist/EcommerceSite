@@ -19,7 +19,7 @@ class Order(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE) # one user can have many orders
 
     def __str__(self):
-        return f'Order for {self.user.username}'
+        return f'Order for {self.user.username} from store: {self.store.name}'
 
 class Item(models.Model):
     name = models.CharField(max_length=100, unique=True)

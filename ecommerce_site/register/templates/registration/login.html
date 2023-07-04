@@ -1,12 +1,21 @@
 {% extends "main/base.html" %}
 
 {% block title %}Login{% endblock %}
-{% block sitename %}Login{% endblock %}
+
+
+
 {% block content %}
-<form method="post" class="form-group" action="">
-    {% csrf_token %}
-    {{form}}
-    <button type="submit" name="submit" class="btn btn-success">Submit</button>
-    <p>Don't have an account? Create one <a href="/register">here</a></p>
-</form>
-{% endblock %}
+
+<div class="header-bar">
+    <h1>Login</h1>
+</div>
+
+<div class="card-body">
+	<form method="post" class="form-group">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<p>Don't have an accoount? Create one <a href="/register">here</a></p>
+		<button type="submit" class="button">Login</button>
+		</form>
+</div>
+{% endblock content %}

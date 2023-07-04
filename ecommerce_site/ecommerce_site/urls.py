@@ -19,7 +19,7 @@ from register import views as rv
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('register/', rv.register),
     path("", include("main.urls")),
-    path("", include("django.contrib.auth.urls"))
+    path("register/", rv.register, name='register'),
+    path('', include('django.contrib.auth.urls')),
 ]

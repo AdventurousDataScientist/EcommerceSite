@@ -32,13 +32,13 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.auth',
+    'django.contrib.auth', # django authenticating new users
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
-    'register.apps.RegisterConfig'
+    'register.apps.RegisterConfig',
 ]
 
 MIDDLEWARE = [
@@ -124,5 +124,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = "/home"
+LOGIN_REDIRECT_URL = "/home" # attempt to redirect to accounts/profile
 
+CRISPY_TEMPLATE_PACK="bootstrap4"
