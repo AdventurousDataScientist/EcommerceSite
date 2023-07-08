@@ -14,5 +14,6 @@ urlpatterns = [
     path("checkout", views.checkout, name="checkout"),
     path("balance", views.balance, name="balance"),
     path("end", views.end, name="end"),
-    path("create_store", views.create_store, name="create_store")
+    path("create_store", views.create_store, name="create_store"),
+    path("store/<str:username>/<int:store_id>", views.show_store, name="show_store"),
 ]

@@ -71,7 +71,9 @@ def cart(request):
         order.save()
         for item, quantity in zip(cart_items, cart_item_quantities):
             item_info[item.name] = [item.price, quantity]
-            purchased_item = PurchasedItem(name=item.name, description=item.description, price=item.price, quantity=quantity, purchase_date=datetime.datetime.now(), order=order)
+            purchased_item = PurchasedItem(name=item.name, description=item.description,\
+                             price=item.price, quantity=quantity, purchase_date=datetime.datetime.now(),\
+                            order=order)
             purchased_item.save()
             #i = Item(name=item.name, price=item.price, description=item.description, buyer=request.user.username, order=order)
 
@@ -227,7 +229,13 @@ def create_store(request):
             description = form.cleaned_data["description"]
             name = form.cleaned_data["name"]
             revenue = 0.00
-            store = Store(owner=request.user, name=name, category=category, description=description, revenue=0.00)
+            store = Store(owner=request.user, name=name, category=category, description=description, revenue=revenue)
             store.save()
             context = {"form": CreateStoreForm()}
     return render(request, "main/create_store.html", context=context)
+
+def show_store(request, username, store_id):
+    store = Store.objects.get(id=store_id)
+    store_items = store.item_set.all()
+
+    return render(request, "main/show_store.html", {"store": store, "store_items":store_items})

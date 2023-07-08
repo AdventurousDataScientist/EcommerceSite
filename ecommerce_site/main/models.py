@@ -26,13 +26,14 @@ class Item(models.Model):
     category = models.TextField(max_length=100, null=True)
     description = models.TextField(max_length=1000)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    image = models.TextField(max_length=1000, null=True)
     post_date = models.DateField(default=date.today())
     stock = models.IntegerField(default=0)
     rating = models.DecimalField(max_digits=2, decimal_places=1, null=True)
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Item: {self.name}, Description: {self.description}, Price: {self.price}'
+        return f'Item: {self.name}, Price: {self.price}, Store: {self.store}'
 
 
 class PurchasedItem(models.Model):
