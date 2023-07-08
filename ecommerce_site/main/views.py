@@ -238,4 +238,11 @@ def show_store(request, username, store_id):
     store = Store.objects.get(id=store_id)
     store_items = store.item_set.all()
 
+    if request.method == 'POST':
+        arguments = request.POST
+        debug_file = open("debug.txt", "w")
+        debug_file.write("Show Store Post Arguments \n\n")
+        print(arguments)
+        debug_file.write(f"Arguments: {arguments}")
+        debug_file.close()
     return render(request, "main/show_store.html", {"store": store, "store_items":store_items})
