@@ -42,7 +42,7 @@ def show_item(request, id):
     return render(request, "main/item.html", {"item": item})
 
 
-def cart(request):
+def cart(request, store_name):
     context = {}
     if request.method == 'POST':
         print('Cart Post request')
@@ -63,11 +63,12 @@ def cart(request):
         #cart_debug_file.write('Cart Post request')
         #cart_debug_file.write(f'Arguments: {arguments}
         # i do not have item in the item name (BIG PROBLEM)
-
+        store = Store.objects.get(name=store_name)
+        cart_item_numbers =  [a for a in arguments if 'item_' in a and '_quantity' not in a]
         cart_items = [Item.objects.get(name=arguments[a]) for a in arguments if 'item_' in a and '_quantity' not in a]
-        cart_item_quantities = [int(arguments[a]) for a in arguments if '_quantity' in a]
+        cart_item_quantities = [int(arguments[f'{item_number}_quantity']) for item_number in cart_item_numbers]
         item_info = dict()
-        order = Order(user=request.user)
+        order = Order(user=request.user, store=store)
         order.save()
         for item, quantity in zip(cart_items, cart_item_quantities):
             item_info[item.name] = [item.price, quantity]
@@ -82,10 +83,11 @@ def cart(request):
         for item, info in item_info.items():
             total_cost += info[0] * info[1]
             total_quantity += info[1]
-            context = {"item_info":item_info,
-                'total_quantity': total_quantity,
-               'total_cost':total_cost
-                       }
+        context = {"item_info":item_info,
+            'total_quantity': total_quantity,
+            'total_cost':total_cost,
+            'order': order
+                    }
     #cart_debug_file.close()
     elif request.method == 'GET':
         context = {}
@@ -151,13 +153,13 @@ def history(request):
     context = {"orders":orders}
     return render(request, "main/history.html", context=context)
 
-def checkout(request):
+def checkout(request, order_id):
     # form should have purchase button
     context = {}
     if request.method == 'GET':
         debug_file = open("debug.txt", "w")
         debug_file.write('CHECK OUT GET REQUEST WORKS \n')
-        order = Order.objects.get(user=request.user)
+        order = Order.objects.get(user=request.user, id=order_id)
         total_cost = 0
         total_quantity = 0
         debug_file.write(f"{request.user.username}'s order: \n")
