@@ -8,7 +8,7 @@
     <h2>Products</h2>
     <br>
     <br>
-    <form method="post" action="#">
+    <form method="post" action="/cart/{{ store.name }}">
         {% csrf_token %}
 
     {% for item in store_items %}
@@ -17,11 +17,11 @@
         <p>Category: {{ item.category }}</p>
         <p style="font-size:10px;">Description: {{ item.description }}</p>
         <p>Price: {{ item.price }}</p>
-        <label>Quantity: </label><input type="number" min="0" max="2147483647 " step="1" value="0" id="quantity" name="item_{{forloop.counter}}">
+        <label>Quantity: </label><input type="number" min="0" max="2147483647 " step="1" value="0" id="quantity" name="item_{{forloop.counter}}_quantity">
         <br>
         <input type="checkbox" id="item" name="item_{{forloop.counter}}" value="{{item.name}}">
     {% endfor %}
-
+    <br>
     <button type="submit" class="button">Add to Cart</button>
 </form>
 {% endblock %}
