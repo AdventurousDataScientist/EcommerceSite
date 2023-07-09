@@ -12,13 +12,14 @@
         {% csrf_token %}
 
     {% for item in store_items %}
-        
         <p>Item: {{ item.name }}</p>
         <img src="{{ item.image }}" style="width:500px;height:600px;">
         <p>Category: {{ item.category }}</p>
         <p style="font-size:10px;">Description: {{ item.description }}</p>
         <p>Price: {{ item.price }}</p>
-        <label>Quantity: </label><input type="number" min="0" max="2147483647 " step="1" value="0">
+        <label>Quantity: </label><input type="number" min="0" max="2147483647 " step="1" value="0" id="quantity" name="item_{{forloop.counter}}">
+        <br>
+        <input type="checkbox" id="item" name="item_{{forloop.counter}}" value="{{item.name}}">
     {% endfor %}
 
     <button type="submit" class="button">Add to Cart</button>
