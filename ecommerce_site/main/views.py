@@ -32,7 +32,7 @@ def create(request, store_name):
             item = Item(name=name, category=category, description=description, price=price, stock=stock, rating=rating, store=store)
             item.save()
             #request.user.sold_items.add(item)
-        return redirect(f"/cart/{store.name}") # redirect to same form
+        return redirect(f"/create/{store.name}") # redirect to same form
     else:
         form = CreateItem()
         return render(request, f"main/create_item.html", {"form": form})
