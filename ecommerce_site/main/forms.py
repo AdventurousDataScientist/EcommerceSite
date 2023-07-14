@@ -1,6 +1,5 @@
 from django import forms
-from .secure_variables import CREDIT_CARD_NUMBER, CVV, EXPIRATION_DATE
-
+from .secure_variables import CREDIT_CARD_NUMBER, EXPIRATION_DATE, CVV
 class PaymentForm(forms.Form):
     cc_number = forms.CharField(label='Credit Card Number', empty_value=CREDIT_CARD_NUMBER)
     cc_expiry = forms.CharField(label='Expiration Date', empty_value=EXPIRATION_DATE)
