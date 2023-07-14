@@ -7,8 +7,13 @@ class PaymentForm(forms.Form):
 
 class CreateItem(forms.Form):
     name = forms.CharField(label="name", min_length=2, max_length=100, required=True)
+    category = forms.CharField(label="category", min_length=2, max_length=100, required=True)
     description = forms.CharField(label="description", min_length=2, max_length=300, required=True)
     price = forms.DecimalField(label="enter price")
+    stock = forms.IntegerField(label="enter stock")
+    rating = forms.DecimalField(label="enter rating")
+
+
 
 class DepositForm(forms.Form):
     balance = forms.DecimalField(max_digits=10, min_value=0.01)

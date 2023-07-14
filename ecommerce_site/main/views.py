@@ -16,20 +16,26 @@ def home(request):
     return render(request, "main/home.html", {"user":request.user, "stores":stores})
 
 
-def create(request):
+def create(request, store_name):
+    store = Store.objects.get(owner=request.user, name=store_name)
+
     if request.method == 'POST':
         form = CreateItem(request.POST)
         if form.is_valid():
             name = form.cleaned_data["name"]
+            category = form.cleaned_data["category"]
             description = form.cleaned_data["description"]
             price = form.cleaned_data["price"]
-            item = Item(name=name, description=description, price=price)
+            # for image add image url upload
+            stock = form.cleaned_data["stock"]
+            rating = form.cleaned_data["rating"]
+            item = Item(name=name, category=category, description=description, price=price, stock=stock, rating=rating, store=store)
             item.save()
-            request.user.sold_items.add(item)
-        return redirect(f"/item/{item.id}")
+            #request.user.sold_items.add(item)
+        return redirect(f"/cart/{store.name}") # redirect to same form
     else:
         form = CreateItem()
-        return render(request, "main/create_item.html", {"form": form})
+        return render(request, f"main/create_item.html", {"form": form})
 
 
 def list_all_items(request):
