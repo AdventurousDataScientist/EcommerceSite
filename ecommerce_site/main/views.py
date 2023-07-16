@@ -144,7 +144,9 @@ def account(request):
         has_profile = False
         if hasattr(request.user, 'profile'):
             has_profile = True
-            context = {"has_profile": has_profile}
+            profile = Profile.objects.filter(user=request.user).first()
+            print(f'Existing Profile: {profile.balance}')
+            context = {"has_profile": has_profile, "profile":profile}
         else:
             has_profile = False
             form = PaymentForm()

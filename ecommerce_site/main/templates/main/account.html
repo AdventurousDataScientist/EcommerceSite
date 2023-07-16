@@ -34,5 +34,7 @@
 </div>
 {% else %}
     <p>You are an existing user, you will not be able to create an account!</p>
+    <p>Balance: {{ profile.balance }} </p>
+    <p>Account Number: {{ profile.id }}</p>
 {% endif %}
 {% endblock %}
