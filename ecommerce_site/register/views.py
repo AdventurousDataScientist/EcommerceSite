@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from .forms import RegisterForm
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 # Create your views here.
 def register(request):
@@ -11,16 +12,23 @@ def register(request):
         valid_form = form.is_valid()
         print(f'Valid form: {valid_form}')
         if form.is_valid():
-            form.save()
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password1"]
             email = form.cleaned_data["email"]
-            new_user = User.objects.create_user(username=username, password=password, email=email)
-            new_user.save()
+            if not User.objects.filter(username=username).first():
+                form.save()
+                messages.info(request, "Thanks for registering. You are now logged in.")
+                new_user = authenticate(username=username,
+                                        password=password,
+                                        )
+                login(request, new_user)
+                print(f'Authenticated after Registration?: {request.user.is_authenticated}')
+            else:
+                return render(request, "register/register_error.html")
+            return redirect("/home")
         else:
             #print(form)
-            pass       
-        return redirect("/home")
+            return redirect("/register")
     else:
         form = RegisterForm()
     return render(request, 'register/register.html', {"form":form})
