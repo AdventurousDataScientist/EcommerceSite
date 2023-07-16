@@ -169,6 +169,7 @@ def checkout(request, order_id):
         debug_file = open("debug.txt", "w")
         debug_file.write('CHECK OUT GET REQUEST WORKS \n')
         order = Order.objects.get(user=request.user, id=order_id)
+        store = Store.objects.get(id=order.store.id)
         total_cost = 0
         total_quantity = 0
         debug_file.write(f"{request.user.username}'s order: \n")
@@ -177,8 +178,13 @@ def checkout(request, order_id):
             total_cost += p_i.quantity * p_i.price
             total_quantity += p_i.quantity
         debug_file.write(f'Total Cost: {total_cost}, Balance: {request.user.profile.balance} \n')
-        request.user.profile.balance -= total_cost
-        request.user.profile.save()
+        
+        if request.user.username != store.owner.username:
+            request.user.profile.balance -= total_cost
+            request.user.profile.save()
+            store.revenue += total_cost
+
+        
         debug_file.write(f'Balance After Purchase: {request.user.profile.balance} \n')
         debug_file.close()
         context = {
@@ -245,7 +251,7 @@ def create_store(request):
             context = {"form": CreateStoreForm()}
     return render(request, "main/create_store.html", context=context)
 
-def show_store(request, username, store_id):
+def show_store(request, store_id):
     store = Store.objects.get(id=store_id)
     store_items = store.item_set.all()
     for i in store_items:
