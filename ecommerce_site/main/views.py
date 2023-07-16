@@ -258,3 +258,7 @@ def show_store(request, username, store_id):
         debug_file.write(f"Arguments: {arguments}")
         debug_file.close()
     return render(request, "main/show_store.html", {"store": store, "store_items":store_items})
+
+def marketplace(request):
+    stores = Store.objects.all()
+    return render(request, "main/marketplace.html", {"stores": stores})

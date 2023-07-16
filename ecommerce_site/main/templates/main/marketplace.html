@@ -1,0 +1,21 @@
+{% extends "main/base.html" %}
+
+{% block title %}Create Store{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="header-bar">
+        <h1>Market Place</h1>
+    </div>
+
+    {% for store in stores %}
+        <h2>Name: {{ store.name }}</h2>
+        <p>Category: {{ store.category }}</p>
+        <p>Description: {{ store.description }}</p>
+        <br>
+        <br>
+        <br>
+    {% endfor %}
+{% endblock content %}
