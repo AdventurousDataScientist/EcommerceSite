@@ -1,22 +1,55 @@
 {% extends "main/base.html" %}
 
 {% block title %}Create Item{% endblock %}
-{% block sitename %}Create Item{% endblock %}
+
 
 {% block content %}
-    <h1>This is the create item page</h1>
+<div class="header-bar">
+    <h1>Create Item</h1>
+</div>
 
     <form method="post" action="#" class="form-group">
         {% csrf_token %} <!--prevents hacking for authenticated users, required for all forms-->
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <button type="submit" name="save" class="btn btn-success">Create New</button>
-            </div>
-            {{form}} <!--just keeping name field only-->
+        <div class="form-attrs">
+            <label>{{form.name.label}}</label>
+            <br>
+            {{form.name}}
         </div>
+
+        <div class="form-attrs">
+            <label>{{form.category.label}}</label>
+            {{form.category}}
+        </div>
+
+        <div class="form-attrs">
+            <label>{{form.image_url.label}}</label>
+            {{form.image_url}}
+        </div>
+
+        <div class="form-attrs">
+            <label>{{form.description.label}}</label>
+            {{form.description}}
+        </div>
+
+        <div class="form-attrs">
+            <label>{{form.price.label}}</label>
+            {{form.price}}
+        </div>
+
+        <div class="form-attrs">
+            <label>{{form.stock.label}}</label>
+            {{form.stock}}
+        </div>
+
+        <div class="form-attrs">
+            <label>{{form.rating.label}}</label>
+            {{form.rating}}
+        </div>
+        <br>
 
          <!--normally you have tons of fields for each piece of data,
         this form variable eliminates all of that -->
+        <button type="submit" class="button">Add Item</button>
 
     </form>
 {% endblock %}

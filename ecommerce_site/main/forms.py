@@ -9,6 +9,7 @@ class CreateItem(forms.Form):
     name = forms.CharField(label="name", min_length=2, max_length=100, required=True)
     category = forms.CharField(label="category", min_length=2, max_length=100, required=True)
     description = forms.CharField(label="description", min_length=2, max_length=300, required=True)
+    image_url = forms.CharField(label="image_url", min_length=2, max_length=1000, required=True)
     price = forms.DecimalField(label="enter price")
     stock = forms.IntegerField(label="enter stock")
     rating = forms.DecimalField(label="enter rating")

@@ -29,7 +29,8 @@ def create(request, store_name):
             # for image add image url upload
             stock = form.cleaned_data["stock"]
             rating = form.cleaned_data["rating"]
-            item = Item(name=name, category=category, description=description, price=price, stock=stock, rating=rating, store=store)
+            image_url = form.cleaned_data["image_url"]
+            item = Item(name=name, category=category, image_url=image_url, description=description, price=price, stock=stock, rating=rating, store=store)
             item.save()
             #request.user.sold_items.add(item)
         return redirect(f"/create/{store.name}") # redirect to same form
@@ -245,7 +246,8 @@ def create_store(request):
 def show_store(request, username, store_id):
     store = Store.objects.get(id=store_id)
     store_items = store.item_set.all()
-
+    for i in store_items:
+        print(f'Item url: {i.image_url}')
     if request.method == 'POST':
         arguments = request.POST
         debug_file = open("debug.txt", "w")

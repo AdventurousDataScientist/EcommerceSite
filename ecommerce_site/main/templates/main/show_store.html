@@ -11,8 +11,9 @@
     <form method="post" action="/cart/{{ store.name }}">
         {% csrf_token %}
     {% for item in store_items %}
-        <p>Item: {{ item.name }}</p>
-        <img src="{{ item.image }}" style="width:500px;height:600px;">
+        <p>Item: <a href="{{ item.image_url }}">{{ item.name }}</a></p>
+        <p>Image URL: {{ item.image_url }}</p>
+        <img src="{{ item.image_url }}" style="width:500px;height:600px;">
         <p>Category: {{ item.category }}</p>
         <p style="font-size:10px;">Description: {{ item.description }}</p>
         <p>Price: {{ item.price }}</p>
