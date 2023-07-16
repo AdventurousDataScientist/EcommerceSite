@@ -15,6 +15,6 @@ urlpatterns = [
     path("balance", views.balance, name="balance"),
     path("end", views.end, name="end"),
     path("create_store", views.create_store, name="create_store"),
-    path("store/<str:username>/<int:store_id>", views.show_store, name="show_store"),
+    path("store/<int:store_id>", views.show_store, name="show_store"),
     path("marketplace", views.marketplace, name='marketplace'),
 ]
