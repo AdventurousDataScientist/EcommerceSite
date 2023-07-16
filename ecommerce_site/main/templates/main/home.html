@@ -11,7 +11,7 @@
 
 {% for store in stores %}
     <!--Put it around a div-->
-    <p>Store: <a href="/store/{{ user.get_username  }}/{{ store.id }}">{{ store.name }}</a></p>
+    <p>Store: <a href="/store/{{ store.id }}">{{ store.name }}</a></p>
     <p>Category: {{ store.category }}</p>
     <p>Description: {{ store.description }}</p>
     <p>Revenue: {{ store.revenue }}</p>
