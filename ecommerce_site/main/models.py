@@ -22,7 +22,7 @@ class Order(models.Model):
         return f'Order for {self.user.username} from store: {self.store.name}'
 
 class Item(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     category = models.TextField(max_length=100, null=True)
     description = models.TextField(max_length=1000)
     price = models.DecimalField(max_digits=10, decimal_places=2)

@@ -183,6 +183,7 @@ def checkout(request, order_id):
             request.user.profile.balance -= total_cost
             request.user.profile.save()
             store.revenue += total_cost
+            store.save()
 
         
         debug_file.write(f'Balance After Purchase: {request.user.profile.balance} \n')
