@@ -12,8 +12,12 @@ debug_file = open("debug.txt", "w")
 
 def home(request):
     #print(f'Home page username: {request.user.username}, type: {type(request.user.username)}')
-    stores = request.user.store_set.all()
-    return render(request, "main/home.html", {"user":request.user, "stores":stores})
+    if request.method == 'GET':
+        if not request.user.is_authenticated:
+            return redirect(f"/login")
+        else:
+            stores = request.user.store_set.all()
+            return render(request, "main/home.html", {"user":request.user, "stores":stores})
 
 
 def create(request, store_name):
