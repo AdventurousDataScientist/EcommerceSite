@@ -1,8 +1,42 @@
 {% extends "main/base.html" %}
-
 {% block title %}{{ store.name }}{% endblock %}
+<head>
+    <!--
 
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/store.css' %}">
+    -->
+</head>
 {% block content %} 
+
+<h1>This is the store</h1>
+
+    <!--
+
+        <div class="row">
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{% static 'main/images/placeholder.png' %}">
+        <div class="box-element product">
+         <p>Nikhil</p>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{% static 'main/images/placeholder.png' %}">
+        <div class="box-element product">
+         <p>loves</p>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{% static 'main/images/placeholder.png' %}">
+        <div class="box-element product">
+         <p>Tepig</p>
+        </div>
+    </div>
+</div>
+-->
+
+   <!-- Original Store with all products in a line -->
     <h1>{{ store.name }}</h1>
     <h2>Products</h2>
     <h3>Owner: {{ store.owner }}</h3>
