@@ -271,5 +271,8 @@ def show_store(request, store_id):
     return render(request, "main/show_store.html", {"store": store, "store_items":store_items})
 
 def marketplace(request):
+    debug_file = open("debug.txt", "w")
+    debug_file.write("Entering Market Place \n\n")
+    debug_file.close()
     stores = Store.objects.all()
     return render(request, "main/marketplace.html", {"stores": stores})
