@@ -62,6 +62,7 @@ def cart(request, store_name):
         debug_file.write('CART PAGE: Cart Post request \n')
         debug_file.write('\n')
         debug_file.write(f'CART PAGE Arguments \n')
+        print(f'arguments: {arguments}')
         for key, value in arguments.items():
             debug_file.write(f'Argument: {key}, value: {value} \n')
         #checkboxes = request.POST.getlist('checks[]')
@@ -181,9 +182,12 @@ def checkout(request, order_id):
             debug_file.write(f"{p_i} \n")
             total_cost += p_i.quantity * p_i.price
             total_quantity += p_i.quantity
-        debug_file.write(f'Total Cost: {total_cost}, Balance: {request.user.profile.balance} \n')
+        current_balance = request.user.profile.balance
+        debug_file.write(f'Total Cost: {total_cost}, Balance: {current_balance} \n')
         
+        print(f'Current Balance: {current_balance}')
         if request.user.username != store.owner.username:
+            current_balance = request.user.profile.balance
             request.user.profile.balance -= total_cost
             request.user.profile.save()
             store.revenue += total_cost
@@ -194,6 +198,7 @@ def checkout(request, order_id):
         debug_file.close()
         context = {
                     "profile":request.user.profile,
+                    "current_balance": current_balance,
                     "order": order,
                    "total_cost": total_cost,
                 "total_quantity": total_quantity
