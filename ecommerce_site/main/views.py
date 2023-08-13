@@ -259,6 +259,8 @@ def create_store(request):
 def show_store(request, store_id):
     store = Store.objects.get(id=store_id)
     store_items = store.item_set.all()
+    num_rows = (len(list(store_items)) // 3 ) + 1
+    num_items_remainder = len(store_items) - (3*num_rows)
     for i in store_items:
         print(f'Item url: {i.image_url}')
     if request.method == 'POST':
@@ -268,7 +270,7 @@ def show_store(request, store_id):
         print(arguments)
         debug_file.write(f"Arguments: {arguments}")
         debug_file.close()
-    return render(request, "main/show_store.html", {"store": store, "store_items":store_items})
+    return render(request, "main/show_store.html", {"store": store, "store_items":store_items, "num_rows":range(num_rows), "num_cols":range(3),"num_items_remainder": num_items_remainder})
 
 def marketplace(request):
     debug_file = open("debug.txt", "w")
