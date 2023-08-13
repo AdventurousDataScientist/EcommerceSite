@@ -3,11 +3,84 @@
 <head>
     <!--
         {% load static %}
-        <link rel="stylesheet" type="text/css" href="{% static 'main/css/store.css' %}">-->
+        <link rel="stylesheet" type="text/css" href="{% static '/main/css/store.css' %}">-->
 </head>
 {% block content %} 
+<div class="center_name">
+    <h1>{{ store.name }}</h1>
+    <h3>Owner: {{ store.owner }}</h3>
+</div>
+<!--
+<div class="row">
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{% static '/main/images/placeholder.png' %}">
+        <div class="box-element product">
+            <h6><strong>Product</strong></h6>
+            <hr>
 
-<h1>This is the store</h1>
+            <button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
+            <a class="btn btn-outline-success" href="#">View</a>
+            <h4 style="display: inline-block; float: right"><strong>$20</strong></h4>
+
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{% static '/main/images/placeholder.png' %}">
+        <div class="box-element product">
+            <h6><strong>Product</strong></h6>
+            <hr>
+            
+            <button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
+            <a class="btn btn-outline-success" href="#">View</a>
+            <h4 style="display: inline-block; float: right"><strong>$20</strong></h4>
+            
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{% static '/main/images/placeholder.png' %}">
+        <div class="box-element product">
+            <h6><strong>Product</strong></h6>
+            <hr>
+
+            <button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
+            <a class="btn btn-outline-success" href="#">View</a>
+            <h4 style="display: inline-block; float: right"><strong>$20</strong></h4>
+
+        </div>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{% static '/main/images/placeholder.png' %}">
+        <div class="box-element product">
+            <h6><strong>Product</strong></h6>
+            <hr>
+
+            <button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
+            <a class="btn btn-outline-success" href="#">View</a>
+            <h4 style="display: inline-block; float: right"><strong>$20</strong></h4>
+
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{% static '/main/images/placeholder.png' %}">
+        <div class="box-element product">
+            <h6><strong>Product</strong></h6>
+            <hr>
+            
+            <button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
+            <a class="btn btn-outline-success" href="#">View</a>
+            <h4 style="display: inline-block; float: right"><strong>$20</strong></h4>
+            
+        </div>
+    </div>
+</div>
+-->
+    
 
     <!--
 
@@ -36,26 +109,31 @@
 -->
 
    <!-- Original Store with all products in a line -->
-    <h1>{{ store.name }}</h1>
-    <h2>Products</h2>
-    <h3>Owner: {{ store.owner }}</h3>
+   
+    <!--<h1>{{ store.name }}</h1>-->
     <h3><a href="/create/{{ store.name }}">Add Item</a></h3>
     <br>
     <br>
     <form method="post" action="/cart/{{ store.name }}">
         {% csrf_token %}
-    {% for item in store_items %}
-        <p>Item: <a href="{{ item.image_url }}">{{ item.name }}</a></p>
-        <p>Image URL: {{ item.image_url }}</p>
-        <img src="{{ item.image_url }}" style="width:500px;height:600px;">
-        <p>Category: {{ item.category }}</p>
-        <p style="font-size:10px;">Description: {{ item.description }}</p>
-        <p>Price: {{ item.price }}</p>
-        <label>Quantity: </label><input type="number" min="0" max="2147483647 " step="1" value="0" id="quantity" name="item_{{forloop.counter}}_quantity">
-        <br>
-        <input type="checkbox" id="item" name="item_{{forloop.counter}}" value="{{item.name}}">
-    {% endfor %}
+    <!-- Do all full rows -->
+    <div class="row">
+        {% for item in store_items %}
+        <div class="col-lg-4">
+            <img class="thumbnail" src="{{ item.image_url }}">
+            <div class="box-element product">
+                <h6><strong>{{ item.name }}</strong></h6>
+                <hr>
+                <label><strong>Select: </strong></label><sp></sp><input type="checkbox" id="item">
+                <h4 style="display: inline-block; float: right"><strong>{{ item.price }}</strong></h4>
+                <hr>
+                <p style="font-size:12px;">{{ item.description }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
     <br>
     <button type="submit" class="button">Add to Cart</button>
 </form>
+
 {% endblock %}
