@@ -30,7 +30,7 @@ class Item(models.Model):
     post_date = models.DateField(default=date.today())
     stock = models.IntegerField(default=0)
     rating = models.DecimalField(max_digits=2, decimal_places=1, null=True)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    stores = models.ManyToManyField(Store)
 
     def __str__(self):
         return f'Item: {self.name}, Price: {self.price}, Store: {self.store}'
